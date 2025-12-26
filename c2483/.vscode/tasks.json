@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: gcc.exe build active file", // 必须和 launch.json 里的 preLaunchTask 一致
+            "command": "C:\\Program Files\\msys64\\ucrt64\\bin\\gcc.exe", // 你的编译器路径
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g", // 必须加 -g，否则无法调试
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "调试前的自动编译任务"
+        }
+    ]
+}
