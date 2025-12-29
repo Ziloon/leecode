@@ -1,13 +1,18 @@
+use std::collections::HashSet;
+
 pub struct Solution;
 
 impl Solution {
-    fn dfs(i:usize, cur_col:&str, next_col:&mut String, allowed_map:&[[u8;6];6]) -> bool {
+    fn dfs(i:usize, cur_col:&str, next_col:&mut String, allowed_map:&[[u8;6];6], invalid_rec:&mut HashSet<String>) -> bool {
         if cur_col.len() == 1 {
             return true;
         }
+        if i == 0 && invalid_rec.contains(cur_col) {
+            return false;
+        }
         if i == cur_col.len()-1 {
             let mut new_next_col = String::new();
-            return Self::dfs(0, next_col, &mut new_next_col, allowed_map);
+            return Self::dfs(0, next_col, &mut new_next_col, allowed_map, invalid_rec);
         }
         let left = (cur_col.as_bytes()[i] - b'A') as usize;
         let right = (cur_col.as_bytes()[i+1] - b'A') as usize;
@@ -15,12 +20,15 @@ impl Solution {
         for top in 0..6 {
             if (allowed_map[left][right] & 1u8 << (top as usize)) != 0u8 {
                 next_col.push((top+'A' as u8) as char);
-                if Self::dfs(i+1, cur_col, next_col, allowed_map) {
+                if Self::dfs(i+1, cur_col, next_col, allowed_map, invalid_rec) {
                     return true;
                 }
 
                 next_col.pop();
             }
+        }
+        if i == 0 {
+            invalid_rec.insert(cur_col.to_string());
         }
         false
     }
@@ -37,8 +45,9 @@ impl Solution {
             }
             allowed_map[left][right] |= 1u8 << top;
         }
+        let mut invalid_rec:HashSet<String> = HashSet::new();
         let mut next_col: String = String::new();
-        Self::dfs(0, &bottom, &mut next_col, &allowed_map)
+        Self::dfs(0, &bottom, &mut next_col, &allowed_map, &mut invalid_rec)
     }
 }
 
