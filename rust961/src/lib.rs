@@ -2,11 +2,9 @@ use std::collections::HashSet;
 
 pub fn repeated_n_times(nums: Vec<i32>) -> i32 {
     let mut rec = HashSet::new();
-    for i in 0..nums.len() {
-        if rec.contains(&nums[i]) {
-            return nums[i];
-        } else {
-            rec.insert(nums[i]);
+    for num in nums {
+        if !rec.insert(num) {
+            return num;
         }
     }
     0
