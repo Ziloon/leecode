@@ -1,12 +1,12 @@
-use std::collections::HashMap;
+use std::collections::HashSet;
 
 pub fn repeated_n_times(nums: Vec<i32>) -> i32 {
-    let mut rec = HashMap::<i32, i32>::new();
+    let mut rec = HashSet::new();
     for i in 0..nums.len() {
-        if rec.contains_key(&nums[i]) {
+        if rec.contains(&nums[i]) {
             return nums[i];
         } else {
-            rec.insert(nums[i], 1);
+            rec.insert(nums[i]);
         }
     }
     0
