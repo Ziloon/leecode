@@ -1,9 +1,7 @@
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-
-#define EMPTY (-10e9)
 
 /*
  * Definition for a binary tree node.
@@ -14,7 +12,15 @@ struct TreeNode {
     struct TreeNode* right;
 };
 
+#define EMPTY (-10e9)
+#define MAX(a, b) (((a) >= (b)) ? (a) : (b))
+
 struct TreeNode* subtreeWithAllDeepest(struct TreeNode* root) {
+    if (root == NULL) {
+        return NULL;
+    }
+    // TODO 
+
     return NULL;
 }
 
