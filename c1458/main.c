@@ -4,34 +4,35 @@
 #include <string.h>
 
 #define MAX(a, b) (((a) >= (b)) ? (a) : (b))
-#define EMPTY (-1e9-7)
-int getSubProduct(int *nums1, int i, int *nums2, int j, int *memo, int colSize)
-{
-    int product = INT_MIN;
-    if (memo[i * colSize + j] != EMPTY)
-    {
-        return memo[i * colSize + j];
-    }
-    if (i == 0 || j == 0)
-    {
-        return -1e9;
-    }
-    int cur_pair = nums1[i - 1] * nums2[j - 1] + MAX(0, getSubProduct(nums1,  i - 1, nums2, j - 1, memo, colSize));
-
-    memo[i * colSize + j] = MAX(MAX(getSubProduct(nums1,  i, nums2, j - 1, memo, colSize), getSubProduct(nums1,  i - 1, nums2, j, memo, colSize)), cur_pair);
-    return memo[i * colSize + j];
-}
 int maxDotProduct(int *nums1, int nums1Size, int *nums2, int nums2Size)
 {
-    int *memo = (int *)malloc(sizeof(int) * ((nums1Size + 1) * (nums2Size + 1)));
-    for (size_t i = 0; i < (nums1Size + 1) * (nums2Size + 1); i++)
+    int rows = nums1Size + 1;
+    int cols = nums2Size + 1;
+
+    int *dp = (int *)malloc(sizeof(int) * rows * cols);
+    for (int i = 0; i < rows; i++)
     {
-        memo[i] = EMPTY;
+        for (int j = 0; j < cols; j++)
+        {
+            dp[i * cols + j] = -1e9;
+        }
     }
-    int product = getSubProduct(nums1, nums1Size, nums2, nums2Size, memo, nums2Size+1);
-    free(memo);
-    memo = NULL;
-    return product;
+
+    for (int i = 1; i <= nums1Size; i++)
+    {
+        for (int j = 1; j <= nums2Size; j++)
+        {
+            int cur_pair = nums1[i - 1] * nums2[j - 1];
+            int with_prev = cur_pair + MAX(0, dp[(i - 1) * cols + (j - 1)]);
+            dp[i * cols + j] = MAX(MAX(dp[(i - 1) * cols + j],
+                                       dp[i * cols + (j - 1)]),
+                                   with_prev);
+        }
+    }
+
+    int result = dp[nums1Size * cols + nums2Size];
+    free(dp);
+    return result;
 }
 
 int main(int argc, char const *argv[])
@@ -43,10 +44,7 @@ int main(int argc, char const *argv[])
     }
     {
         int nums1[] = {3, -2};
-        int nums2[] = {
-            2,
-            -6,
-        };
+        int nums2[] = {2, -6, 7};
         assert(21 == maxDotProduct(nums1, sizeof(nums1) / sizeof(nums1[0]), nums2, sizeof(nums2) / sizeof(nums2[0])));
     }
     {
