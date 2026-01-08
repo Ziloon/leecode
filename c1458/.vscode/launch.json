@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C语言一键调试 (UCRT64)",
+            "type": "cppdbg",
+            "request": "launch",
+            // 调试目标：当前文件名对应的exe
+            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            // 关键：你的 GDB 路径，注意反斜杠转义
+            "miDebuggerPath": "C:\\Program Files\\msys64\\ucrt64\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            // 必须与 tasks.json 中的 label 一致
+            "preLaunchTask": "C/C++: gcc.exe build active file"
+        }
+    ]
+}
